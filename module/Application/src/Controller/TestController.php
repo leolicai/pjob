@@ -14,6 +14,8 @@ class TestController extends BaseController
 {
     public function indexAction()
     {
+        $this->appLogger()->debug('Test log');
+
         return 'version 1.0' . PHP_EOL;
     }
 
