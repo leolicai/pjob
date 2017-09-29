@@ -41,7 +41,7 @@ return [
         'router' => [
             'routes' => [
 
-                'azdm' => [
+                'zdm' => [
                     'type' => 'simple',
                     'may_terminate' => true,
                     'options' => [
@@ -53,13 +53,13 @@ return [
                     ],
                 ],
 
-                'testVersion' => [
+                'test' => [
                     'type' => 'simple',
                     'options' => [
-                        'route' => 'test version',
+                        'route' => 'test',
                         'defaults' => [
                             'controller' => Controller\TestController::class,
-                            'action' => 'version',
+                            'action' => 'index',
                         ],
                     ],
                 ],

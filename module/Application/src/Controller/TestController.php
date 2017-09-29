@@ -12,7 +12,7 @@ namespace Application\Controller;
 
 class TestController extends BaseController
 {
-    public function versionAction()
+    public function indexAction()
     {
         return 'version 1.0' . PHP_EOL;
     }
