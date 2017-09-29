@@ -4,9 +4,13 @@ vendor/
 
 # Local configs
 config/autoload/*.local.php
+config/development.config.php
 
 # Binary gettext files
 *.mo
+*.DS_Store
+
+composer.lock
 
 # Data
 data/logs/
@@ -23,3 +27,6 @@ data/DoctrineORMModule/cache/
 # Legacy ZF1
 demos/
 extras/documentation
+
+# PhpStorm
+.idea/
