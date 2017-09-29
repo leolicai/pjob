@@ -1,4 +1,4 @@
-#!/usr/bin/env php -q
+#!/usr/bin/php -q
 <?php
 /**
  * bootstrap.php
