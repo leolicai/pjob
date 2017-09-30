@@ -32,9 +32,9 @@ class BaseController extends AbstractConsoleController
     protected function checkRequestResult($result)
     {
         $response = $result['response'];
+        $request = $result['request'];
 
         if (! $response instanceof Response) {
-            $request = $result['request'];
             $this->appLogger()->err(
                 __METHOD__ . PHP_EOL .
                 'Request Failed!' . PHP_EOL .
@@ -44,7 +44,6 @@ class BaseController extends AbstractConsoleController
         }
 
         if (! $response->isSuccess()) {
-            $request = $result['request'];
             $this->appLogger()->err(
                 __METHOD__ . PHP_EOL .
                 'Response Failed:' . $response->getReasonPhrase()  . PHP_EOL .
@@ -55,6 +54,15 @@ class BaseController extends AbstractConsoleController
             );
             return false;
         }
+
+        $this->appLogger()->debug(
+            __METHOD__ . PHP_EOL . '/////////////////////// Request Headers ///////////////////////' . PHP_EOL .
+            $request->getHeaders()->toString()
+        );
+        $this->appLogger()->debug(
+            __METHOD__ . PHP_EOL . '/////////////////////// Response Headers ///////////////////////' . PHP_EOL .
+            $response->getHeaders()->toString()
+        );
 
         return $response;
     }

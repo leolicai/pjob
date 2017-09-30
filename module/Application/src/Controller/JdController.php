@@ -12,6 +12,7 @@ namespace Application\Controller;
 
 use Application\Service\NetWorkService;
 use PHPHtmlParser\Dom;
+use Zend\Http\Header\Cookie;
 use Zend\Http\Response;
 
 
@@ -59,6 +60,7 @@ class JdController extends BaseController
         }
         $loginPageCookie = $response->getCookie();
 
+
         $html = iconv('GBK', 'UTF-8', $response->getBody());
 
         $dom = new Dom();
@@ -72,7 +74,7 @@ class JdController extends BaseController
             if ('uuid' == $name) { $data[$name] = $input->getAttribute('value'); }
             if ('pubKey' == $name) { $data[$name] = $input->getAttribute('value'); }
             if ('_t' == $name) { $data[$name] = $input->getAttribute('value'); }
-            if ('loginType' == $name) { $data[$name] = 'f'; }
+            if ('loginType' == $name) { $data[$name] = 'f'; } //$input->getAttribute('value'); }
             if ('authcode' == $name) { $data[$name] = ''; }
             if ('chkRememberMe' == $name) { $data[$name] = ''; }
             if ('eid' == $name) { $data[$name] = 'MWZ2KUI6A3A2T5E7NZWGQDVFOENOYBKSD72OLI2XLCSZECT4VTXOPJMI3N3TOWRFCK4ACZH5IJKG3EWLP4L45L4I5U'; }
@@ -101,6 +103,7 @@ class JdController extends BaseController
 
         $headers = array_merge(
             NetWorkService::HeaderAcceptTextHtmlString(),
+            NetWorkService::HeaderPostContentTypeString(),
             NetWorkService::HeaderXRequestWithString(),
             NetWorkService::HeaderRefererString($path['ref'])
         );

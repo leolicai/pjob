@@ -11,6 +11,7 @@ namespace Application\Service;
 
 
 use Zend\Http\Client;
+use Zend\Http\Header\Cookie;
 use Zend\Http\Header\SetCookie;
 use Zend\Http\Headers;
 use Zend\Http\Request;
@@ -82,6 +83,20 @@ class NetWorkService
             $requestHeaders->addHeaderLine($k, $v);
         }
 
+        if (null !== $cookies) {
+            $_cookies = [];
+            foreach ((array)$cookies as $cookie) {
+                if ($cookie instanceof SetCookie) {
+                    if (!$cookie->isExpired()) {
+                        $_cookies[] = $cookie;
+                    }
+                }
+            }
+            if (count($_cookies)) {
+                $requestHeaders->addHeader(Cookie::fromSetCookieArray($_cookies));
+            }
+        }
+
         $request = new Request();
         $request->setUri($url);
         $request->setMethod($method);
@@ -103,9 +118,9 @@ class NetWorkService
             'timeout' => 30,
         ]);
 
-        if (null !== $cookies) {
-            $client->addCookie($cookies);
-        }
+        //if (null !== $cookies) {
+            //$client->addCookie($cookies);
+        //}
 
         $response = $client->send();
         return [

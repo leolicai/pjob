@@ -39,23 +39,21 @@ class ZdmController extends BaseController
      */
     public function checkinZdm()
     {
-        $cookie = $this->getLoginCookie();
-        if (false === $cookie) {
+        $cookies = $this->getLoginCookie();
+        if (!($cookies instanceof \ArrayIterator || $cookies instanceof \Traversable)) {
             return;
         }
-
         $this->appLogger()->debug("Got prepare login cookies");
         sleep(1);
 
-        $cookie = $this->getLoginedCookie($cookie);
-        if (false === $cookie) {
+        $cookies = $this->getLoginedCookie($cookies);
+        if (!($cookies instanceof \ArrayIterator || $cookies instanceof \Traversable)) {
             return;
         }
-
         $this->appLogger()->debug("Got login cookies");
         sleep(1);
 
-        $response = $this->sendCheckInTask($cookie);
+        $response = $this->sendCheckInTask($cookies);
         if ($response instanceof Response) {
             $this->appLogger()->debug(__METHOD__ . PHP_EOL . $response->getBody());
         }
@@ -75,14 +73,8 @@ class ZdmController extends BaseController
         }
 
         $time = time();
-        $rand1 = random_int(111, 999);
-        $rand2 = random_int(111, 999);
 
-        $rand_p1 = random_int(111111, 999999);
-        $rand_p2 = random_int(1111111, 9999999);
-        $rand_p3 = random_int(1111111, 9999999);
-
-        $callback = 'callback=jQuery1' . $rand_p1 . $rand_p2 . $rand_p3 . '_' . $time . $rand1 . '&_' . $time . $rand2;
+        $callback = 'callback=jQuery1' . $time . $time . '_' . $time . substr($time, 0, 3) . '&_=' . $time . substr($time, -3);
 
         $headers = array_merge(
             NetWorkService::HeaderAcceptAllString(),
@@ -91,7 +83,7 @@ class ZdmController extends BaseController
 
         $result = NetWorkService::HttpGetRequest($config['url'] . $callback, $headers, $cookies);
 
-        return $this->checkResult($result);
+        return $this->checkRequestResult($result);
     }
 
 
@@ -131,7 +123,7 @@ class ZdmController extends BaseController
 
         $result = NetWorkService::HttpPostRequest($config['url'], $data, $headers, $cookies);
 
-        $response = $this->checkResult($result);
+        $response = $this->checkRequestResult($result);
         if ($response instanceof Response) {
             return $response->getCookie();
         }
@@ -157,46 +149,11 @@ class ZdmController extends BaseController
 
         $result = NetWorkService::HttpGetRequest($config['url'], $headers);
 
-        $response = $this->checkResult($result);
+        $response = $this->checkRequestResult($result);
         if ($response instanceof Response) {
             return $response->getCookie();
         }
         return false;
-    }
-
-
-    /**
-     * @param array $result
-     * @return bool|Response
-     */
-    private function checkResult($result)
-    {
-        $response = $result['response'];
-
-        if (! $response instanceof Response) {
-            $request = $result['request'];
-            $this->appLogger()->err(
-                __METHOD__ . PHP_EOL .
-                'Request Failed!' . PHP_EOL .
-                $request->getHeaders()->toString()
-            );
-            return false;
-        }
-
-        if (! $response->isSuccess()) {
-            $request = $result['request'];
-            $this->appLogger()->err(
-                __METHOD__ . PHP_EOL .
-                'Response Failed:' . $response->getReasonPhrase()  . PHP_EOL .
-                'Request headers' . PHP_EOL .
-                $request->getHeaders()->toString() .
-                'Response headers' . PHP_EOL .
-                $response->getHeaders()->toString()
-            );
-            return false;
-        }
-
-        return $response;
     }
 
 }
