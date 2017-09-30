@@ -53,6 +53,17 @@ return [
                     ],
                 ],
 
+                'jd' => [
+                    'type' => 'simple',
+                    'options' => [
+                        'route' => '<doAction> jd',
+                        'defaults' => [
+                            'controller' => Controller\JdController::class,
+                            'action' => 'index',
+                        ],
+                    ],
+                ],
+
                 'test' => [
                     'type' => 'simple',
                     'options' => [

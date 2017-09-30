@@ -2,7 +2,8 @@
     "require": {
         "zendframework/zend-mvc-console": "^1.1.11",
         "zendframework/zend-log": "^2.9.2",
-        "zendframework/zend-mail": "^2.8.0"
+        "zendframework/zend-mail": "^2.8.0",
+        "paquettg/php-html-parser": "^1.7.0"
     },
 
     "autoload": {
